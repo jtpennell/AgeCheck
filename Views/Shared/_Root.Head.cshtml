@@ -29,14 +29,14 @@
     if (commonSettings.JqueryMigrateScriptLoggingActive)
     {
         Html.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/jquery-migrate/jquery-migrate.js");
-        Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/CookiesBakery/Content/js/bpopup.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/CookiesBakery/Content/js/easing.js");
+        Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/bpopup.min.js");
+		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
     }
     else
     {
         Html.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/jquery-migrate/jquery-migrate.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/CookiesBakery/Content/js/bpopup.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/CookiesBakery/Content/js/easing.js");
+		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/bpopup.min.js");
+		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
     }
 
     Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/main.js");
@@ -98,7 +98,7 @@
         var ageVerified = httpContextAccessor.HttpContext.Request.Cookies["verified"];
         if (ageVerified == null)
         {
-            Html.RenderPartial("~/Themes/CookiesBakery/Views/Shared/AgeCheck.cshtml");
+            Html.RenderPartial($"~/Themes/{themeName}/Views/Shared/AgeCheck.cshtml");
 			var cookieOptions = new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(1)
