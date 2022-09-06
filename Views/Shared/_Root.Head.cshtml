@@ -20,8 +20,6 @@
 
 @{
     var themeName = await themeContext.GetWorkingThemeNameAsync();
-}
-@{
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.countryselect.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.common.js");
@@ -30,13 +28,13 @@
     {
         Html.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/jquery-migrate/jquery-migrate.js");
         Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/bpopup.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
+        Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
     }
     else
     {
         Html.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/jquery-migrate/jquery-migrate.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/bpopup.min.js");
-		Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
+        Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/bpopup.min.js");
+        Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/easing.js");
     }
 
     Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/main.js");
@@ -95,15 +93,16 @@
 </head>
 <body>
     @{
-        var ageVerified = httpContextAccessor.HttpContext.Request.Cookies["verified"];
-        if (ageVerified == null)
+        var c = httpContextAccessor.HttpContext.Request.Cookies["verified"];
+        if (c == null)
         {
             Html.RenderPartial($"~/Themes/{themeName}/Views/Shared/AgeCheck.cshtml");
-			var cookieOptions = new CookieOptions
+            var cookieOptions = new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(1)
             };
-            //httpContextAccessor.HttpContext.Response.Cookies.Append("verified", "yes");
+
+            httpContextAccessor.HttpContext.Response.Cookies.Append("verified", "yes", cookieOptions);
         }
     }
     @RenderBody()

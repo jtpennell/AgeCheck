@@ -1,21 +1,36 @@
-﻿@{
-    <!DOCTYPE html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+﻿@using Nop.Core.Domain
+@using Nop.Core.Configuration
+@using StackExchange.Profiling
+@using Nop.Core.Domain.Common
+@using Nop.Core.Domain.Seo
+@using Nop.Services.Events
+@using Nop.Services.Security
+@using Nop.Web.Framework.Events
+@using Nop.Core
+@using Nop.Core.Events
+@using Microsoft.AspNetCore.Http
+@inject IThemeContext themeContext
+@{
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+}
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
 
-        <style>
-            #AgeCheck {
-                text-align: center;
-                background-color: #fff;
-                border-radius: 0px;
-                color: #333;
-                display: auto;
-                padding: 20px;
-                width: 500px;
-                height: 300px;
-			
-            }
+    <style>
+        #AgeCheck {
+            margin: 0 auto;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 0px;
+            color: #333;
+            display: none;
+            padding: 20px;
+            width: 500px;
+            height: 300px;
+        }
+
             #AgeCheck .title {
                 font-family: "BrandonTextWeb-Black",Verdana,Arial,Helvetica,sans-serif;
                 text-transform: uppercase;
@@ -37,115 +52,107 @@
                 color: #A5A3A3;
             }
 
-            #YesNo18 {
-                text-align: center;
-                margin-top: 15px;
-            }
-        </style>
+        #YesNo18 {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
 
     <style media="all and (max-width: 660px)">
 
-            #AgeCheck .title {
-                font-size: 18px !important;
-            }
+        #AgeCheck .title {
+            font-size: 18px !important;
+        }
 
-            #AgeCheck .image {
-                margin-top: 5px;
-                max-width: 50%;
-            }
+        #AgeCheck .image {
+            margin-top: 5px;
+            max-width: 50%;
+        }
 
-            #AgeCheck .text {
-                margin-top: 5px;
-                font-size: 11px !important;
-            }
-        </style>
+        #AgeCheck .text {
+            margin-top: 5px;
+            font-size: 11px !important;
+        }
+    </style>
 
-        <style media="all and (max-width: 360px)">
-            #AgeCheck {
-                width: 360px !important;
-            }
+    <style media="all and (max-width: 360px)">
+        #AgeCheck {
+            width: 360px !important;
+        }
 
             #AgeCheck .image {
                 margin-top: 20px;
                 max-width: 50%;
             }
-        </style>
+    </style>
 
-        <style media="all and (max-width: 720px)">
+    <style media="all and (max-width: 720px)">
 
-            #AgeCheck .title {
-                font-size: 18px !important;
-            }
+        #AgeCheck .title {
+            font-size: 18px !important;
+        }
 
-            #AgeCheck .image {
-                max-width: 50%;
-            }
-        </style>
+        #AgeCheck .image {
+            max-width: 50%;
+        }
+    </style>
 
-       
-		
-		<style media="all and (max-width: 900px)">
-            #AgeCheck {
-                width: 400px;
-            }
+
+
+    <style media="all and (max-width: 900px)">
+        #AgeCheck {
+            width: 400px;
+        }
 
             #AgeCheck .image {
                 margin-top: 10px;
                 max-width: 50%;
             }
-        </style>
-        
-    </head>
-    <body>
-            <div id="AgeCheck">
-            <div style="font-family: arial, helvetica, sans-serif; ">
+    </style>
 
-                <img class="image" src="/Themes/themeName/Content/images/logo.png" />
+</head>
+<body>
+    <div id="AgeCheck">
+        <div style="font-family: arial, helvetica, sans-serif; ">
 
-                <div class="title" style="color:darkgreen">
-                    Are you over the age of 18?
-                </div>
+            <img class="image" src="/Themes/@themeName/Content/images/logo.png" />
 
-                <div id="YesNo18">
-                    <img src="/Themes/themeName/Content/images/age_yesno.png" alt="" usemap="#headmap" style="height: 31px" /> @*resize yesno image button*@
-                    <map name="headmap">
-                        <area id="age-yes" coords="0,0, 60, 31" shape="rect" href="javascript:click()" alt="yes" /> @*adjust coordinates of yesno prev 0,0 124,61 168,0, 291,61*@
-                        <area id="age-no" coords="85,0, 146, 31" shape="rect" href="http://www.alcohol.org.nz/" alt="no" />
-                    </map>
-                </div>
+            <div class="title" style="color:darkgreen">
+                Are you over the age of 18?
             </div>
+
+            <div id="YesNo18">
+                <img src="/Themes/@themeName/Content/images/age_yesno.png" alt="" usemap="#headmap" style="height: 31px" /> @*resize yesno image button*@
+                <map name="headmap">
+                    <area id="age-yes" coords="0,0, 60, 31" shape="rect" href="javascript:click()" alt="yes" /> @*adjust coordinates of yesno prev 0,0 124,61 168,0, 291,61*@
+                    <area id="age-no" coords="85,0, 146, 31" shape="rect" href="http://www.alcohol.org.nz/" alt="no" />
+                </map>
             </div>
-    </body>
-        <script type="text/javascript">
-			var w = window.innerWidth;
-            var h = window.innerHeight;		
-			
-			function setCookie(cname, cvalue, exdays) {
-				const d = new Date();
-				d.setTime(d.getTime() + (exdays*24*60*60*1000));
-				let expires = "expires="+ d.toUTCString();
-				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-			}
-		
-            function agePopup() {
-                $('#AgeCheck').bPopup(
-                    {
-                        easing: 'easeOutBack', //uses jQuery easing plugin
-                        speed: 500,
-                        modal: true,
-                        escClose: false,
-                        modalClose: false,
-                        transition: 'slideDown',                       
-                    });
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    function agePopup() {
+        ///alert(typeof jQuery().bPopup);
+        ///alert(w);
+        $('#AgeCheck').bPopup(
+            {
+                easing: 'easeOutBack', //uses jQuery easing plugin
+                speed: 500,
+                modal: true,
+                escClose: false,
+                modalClose: false,
+                transition: 'slideDown',
+            });
 
-                $('#age-yes').click(function () {
-					setCookie('verified','yes',1);
-                    $('#AgeCheck').bPopup().close();
+        $('#age-yes').click(function () {
+            $('#AgeCheck').bPopup().close();
+        });
+    }
+    window.onload = agePopup;
 
-                });
-            }
-            window.onload = agePopup;
+</script>
 
-        </script> 
-   
-}
+
